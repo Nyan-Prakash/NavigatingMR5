@@ -26,8 +26,8 @@ export default function Home() {
     
     // Calculate path and instructions
     const {path, path2, instructions } = calculateRoute(start, end);
-    console.log("Path2: " + path2);
-    console.log("Path: " + path);
+    console.log("Path2: " + path2.length);
+    console.log("Path: " + path.length);
 
     setPath(path);
     setPath2(path2);
@@ -84,6 +84,7 @@ export default function Home() {
                   startLocation={startLocation}
                   endLocation={endLocation}
                   path={path}
+                  path2={path2}
                   onLoad={() => setIsMapLoaded(true)}
                 />
               </div>
@@ -164,98 +165,90 @@ export default function Home() {
   );
 }
 
-// Helper function to calculate route
+// Helper function to calculate route and generate turn‑by‑turn instructions
 function calculateRoute(start, end) {
-
-    var path = [
-      { x: start.x, y: start.y },
-      { x: 800, y: start.y},
-      { x: 800, y: end.y},
-      { x: end.x, y: end.y }
-    ];
-
-    var path2 = [
-      { x: start.x, y: start.y },
-      { x: 800, y: start.y},
-      { x: 800, y: end.y},
-      { x: end.x, y: end.y }
-    ];
+  // 1) Build path & path2 exactly as you had it before
+  let path = [
+    { x: start.x, y: start.y },
+    { x: 800, y: start.y },
+    { x: 800, y: end.y },
+    { x: end.x, y: end.y }
+  ];
+  let path2 = [];
   
-  //First to first
-  
-  if(start.x < 499 && end.x < 499)
-  {
-    
+  // your quadrant logic...
+  if (start.x < 499 && end.x < 499) {
     path = [
       { x: start.x, y: start.y },
-      { x: 807, y: start.y},
-      { x: 807, y: end.y},
-      { x: end.x, y: end.y }
+      { x: 307, y: start.y },
+      { x: 307, y: end.y },
+      { x: end.x, y: end.y },
     ];
-    
-  }
-
-  //Second to second
-  else if (start.x > 500 && end.x > 500)
-  {
+  } else if (start.x > 500 && end.x > 500) {
     path = [
       { x: start.x, y: start.y },
-      { x: 810, y: start.y},
-      { x: 810, y: end.y},
-      { x: end.x, y: end.y }
+      { x: 810, y: start.y },
+      { x: 810, y: end.y },
+      { x: end.x, y: end.y },
     ];
-  }
-
-  //first to second
-  else if (start.x < 499 && end.x > 499)
-  {
+  } else if (start.x < 499 && end.x > 499) {
     path = [
       { x: start.x, y: start.y },
       { x: 307, y: start.y },
       { x: 307, y: 880 },
-      { x: 385, y: 880 }
+      { x: 385, y: 880 },
     ];
-
     path2 = [
-      {x: 900, y: 900},
-      {x: 900, y: 880 },
-      {x: 810, y: 880 },
+      { x: 900, y: 900 },
+      { x: 900, y: 880 },
+      { x: 810, y: 880 },
       { x: 810, y: end.y },
-      { x: end.x, y: end.y }    
+      { x: end.x, y: end.y },
     ];
-  }
-    
-  else if(start.x > 499 && end.x < 499)
-  {
-    
+  } else if (start.x > 499 && end.x < 499) {
     path = [
       { x: start.x, y: start.y },
       { x: 810, y: start.y },
       { x: 810, y: 880 },
       { x: 900, y: 880 },
-      { x: 900, y: 900},
+      { x: 900, y: 900 },
     ];
-
     path2 = [
       { x: 385, y: 880 },
       { x: 307, y: 880 },
       { x: 307, y: end.y },
       { x: end.x, y: end.y },
     ];
-
-      
-
   }
 
-  
-  
-  const instructions = [
-    `Start at ${start.name}`,
-    `Walk straight ahead for about ${Math.round(Math.abs((start.x + end.x) / 2 - start.x))} feet`,
-    `Turn ${end.y > start.y ? 'right' : 'left'} and walk for about ${Math.round(Math.abs(end.y - start.y))} feet`,
-    `Turn ${end.x > (start.x + end.x) / 2 ? 'right' : 'left'} and walk for about ${Math.round(Math.abs(end.x - (start.x + end.x) / 2))} feet`,
-    `You have arrived at ${end.name}`
-  ];
-  
+  // 2) Pick the correct list of points
+  const points = path2.length > path.length ? [...path, ...path2] : path;
+
+  // 3) Build instructions
+  const instructions = [];
+  instructions.push(`Start at ${start.name}`);
+
+  for (let i = 1; i < points.length; i++) {
+    const prev = points[i - 1];
+    const curr = points[i];
+    const dx = (curr.x - prev.x)/2;
+    const dy = (curr.y - prev.y)/2;
+
+    // decide whether this is more of an east/west move or north/south
+    let direction;
+    if (Math.abs(dx) > Math.abs(dy)) {
+      direction = dx > 0 ? 'east' : 'west';
+    } else {
+      direction = dy > 0 ? 'south' : 'north';
+    }
+
+    const distance = Math.round(Math.sqrt(dx * dx + dy * dy));
+    instructions.push(`Go ${direction} for about ${distance} feet`);
+  }
+
+  instructions.push(`You have arrived at ${end.name}`);
+
   return { path, path2, instructions };
 }
+
+

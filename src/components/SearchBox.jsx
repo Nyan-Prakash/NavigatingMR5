@@ -18,13 +18,13 @@ const SearchBox = ({ onSearch }) => {
     { id: 'student-lounge', name: 'BME Student Lounge (1042)', x: 450, y: 200, floor: '1st Floor' },
     { id: 'atrium', name: 'BME 2nd Floor Atrium', x: 655, y: 203, floor: '2nd Floor' },
     { id: 'shared-lab', name: 'Shared Lab Space', x: 795, y: 280, floor: '2nd Floor' },
-    { id: 'kubelick', name: 'Kubelick Lab', x: 450, y: 280, floor: '1st Floor' },
-    { id: 'griffin', name: 'Griffin Lab', x: 450, y: 320, floor: '1st Floor' },
-    { id: 'french', name: 'French Lab', x: 450, y: 420, floor: '1st Floor' },
-    { id: 'sheybani', name: 'Sheybani Lab', x: 450, y: 470, floor: '1st Floor' },
-    { id: 'abebayehu', name: 'Abebayehu Lab', x: 450, y: 520, floor: '1st Floor' },
-    { id: 'christ1', name: 'Christ Lab #1', x: 450, y: 570, floor: '1st Floor' },
-    { id: 'christ2', name: 'Christ Lab #2', x: 450, y: 620, floor: '1st Floor' },
+    { id: 'kubelick', name: 'Kubelick Lab', x: 320, y: 370, floor: '1st Floor' },
+    { id: 'griffin', name: 'Griffin Lab', x: 320, y: 430, floor: '1st Floor' },
+    { id: 'french', name: 'French Lab', x: 320, y: 570, floor: '1st Floor' },
+    { id: 'sheybani', name: 'Sheybani Lab', x: 320, y: 640, floor: '1st Floor' },
+    { id: 'abebayehu', name: 'Abebayehu Lab', x: 320, y: 710, floor: '1st Floor' },
+    { id: 'christ1', name: 'Christ Lab #1', x: 320, y: 780, floor: '1st Floor' },
+    { id: 'christ2', name: 'Christ Lab #2', x: 320, y: 850, floor: '1st Floor' },
     { id: 'papin2', name: 'Papin Lab #2', x: 795, y: 356, floor: '2nd Floor' },
     { id: 'price1', name: 'Price Lab #1', x: 795, y: 435, floor: '2nd Floor' },
     { id: 'price2', name: 'Price Lab #2', x: 795, y: 500, floor: '2nd Floor' },
@@ -145,25 +145,25 @@ const SearchBox = ({ onSearch }) => {
           </div>
         </div>
         
-        <motion.button 
+        <button 
           type="submit"
-          className="search-button"
+          className="search2-button"
           disabled={!start || !end || isSearching}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
           {isSearching ? (
-            <span className="button-text">
+            <span className="search-button">
               <span className="spinner"></span>
               Finding Route...
             </span>
           ) : (
-            <span className="button-text">
+            <span className="search-button">
               <FaSearch />
               Get Directions
             </span>
           )}
-        </motion.button>
+        </button>
       </form>
       
       <style jsx>{`
@@ -287,35 +287,57 @@ const SearchBox = ({ onSearch }) => {
         }
         
         .search-button {
-          width: 100%;
-          padding: 0.875rem 1.5rem;
-          background-color: var(--primary-color);
-          color: white;
-          border: none;
-          border-radius: 8px;
-          font-size: 1rem;
-          font-weight: 600;
-          cursor: pointer;
-          transition: background-color 0.2s;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        
-        .search-button:hover:not(:disabled) {
-          background-color: var(--primary-dark);
-        }
-        
-        .search-button:disabled {
-          opacity: 0.7;
-          cursor: not-allowed;
-        }
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  outline: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+.search-button:hover:not(:disabled) {
+  background-color: #005bb5;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.search-button:active {
+  background-color: #004499;
+  transform: translateY(0);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
         
         .button-text {
-          display: flex;
+          display: inline-flex;
           align-items: center;
           gap: 0.5rem;
         }
+
+        .search2-button {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  background-color:white;
+  color: white;
+  border: none;
+  outline: none;
+  display: flex;
+}
+
         
         .spinner {
           width: 18px;

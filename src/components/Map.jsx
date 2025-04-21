@@ -50,7 +50,6 @@ const Map = ({ startLocation, endLocation, path, path2, onLoad }) => {
       }
 
 
-
       if (path2 && path2.length > 1) {
         // Draw path shadow
         ctx.strokeStyle = 'rgba(235, 37, 37, 0.3)';
@@ -80,7 +79,7 @@ const Map = ({ startLocation, endLocation, path, path2, onLoad }) => {
         drawMarker(ctx, 900, 900, '#2563EB', 'Stairs', canvas.width, canvas.height);
       
     };
-  }, [startLocation, endLocation, path, onLoad]);
+  }, [startLocation, endLocation, path, path2, onLoad]);
   
   // Helper function to draw grid
   function drawGrid(ctx, width, height) {
@@ -121,6 +120,7 @@ const Map = ({ startLocation, endLocation, path, path2, onLoad }) => {
         ctx.lineTo(x, y);
       }
     });
+    
     
     ctx.stroke();
   }
